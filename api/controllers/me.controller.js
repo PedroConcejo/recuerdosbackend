@@ -1,43 +1,26 @@
-
-const TaskModel = require('../models/task.model')
+const RoomModel = require('../models/room.model')
+const PartnerModel = require('../models/partner.model')
 
 const { handleError } = require('../utils')
 
 module.exports = {
-  getMyTask,
-  createTask,
-  deleteTask,
-  updateTask,
-  getTaskById
+  getAllPartner,
+  updateUser,
+  getPartnerById,
+  startRoom,
+  deleteRoom,
+  newMsn
 }
 
-function getMyTask (req, res) {
-  TaskModel
-    .find({ author: res.locals.user._id })
-    .sort({ tittle: -1 })
+function getAllPartner (req, res) {
+  PartnerModel
+    .find()
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }
 
-function createTask (req, res) {
-  TaskModel
-    .create({
-      author: res.locals.user._id,
-      ...req.body
-    })
-    .then(response => res.json(response))
-    .catch((err) => handleError(err, res))
-}
-
-function deleteTask (req, res) {
-  TaskModel
-    .remove({ _id: req.params.taskid })
-    .then(response => res.json(response))
-    .catch(err => handleError(err, res))
-}
-
-function updateTask (req, res) {
-  TaskModel
+function updateUser (req, res) {
+  RoomModel
     .findByIdAndUpdate(req.params.taskid, req.body, {
       new: true,
       runValidators: true
@@ -46,8 +29,35 @@ function updateTask (req, res) {
     .catch((err) => handleError(err, res))
 }
 
-function getTaskById (req, res) {
-  TaskModel
+function startRoom (req, res) {
+  RoomModel
+    .create({
+      user: res.locals.user._id,
+      ...req.body
+    })
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function deleteRoom (req, res) {
+  RoomModel
+    .remove({ _id: req.params.roomid })
+    .then(response => res.json(response))
+    .catch(err => handleError(err, res))
+}
+
+function newMsn (req, res) {
+  RoomModel
+    .findByIdAndUpdate(req.params.taskid, req.body, {
+      new: true,
+      runValidators: true
+    })
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getPartnerById (req, res) {
+  RoomModel
     .findById(req.params.taskid)
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))

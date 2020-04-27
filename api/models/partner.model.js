@@ -1,9 +1,14 @@
 const mongoose = require('mongoose')
 
-const userSchema = new mongoose.Schema({
+const partnerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Name is required']
+  },
+  partner: {
+    type: String,
+    required: [true, 'Business is required'],
+    unique: true
   },
   email: {
     type: String,
@@ -27,7 +32,7 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['user', 'partner'],
-    default: 'user'
+    default: 'partner'
   },
   img: {
     type: String
@@ -43,5 +48,5 @@ const userSchema = new mongoose.Schema({
   }
 })
 
-const userModel = mongoose.model('user', userSchema)
-module.exports = userModel
+const partnerModel = mongoose.model('partner', partnerSchema)
+module.exports = partnerModel

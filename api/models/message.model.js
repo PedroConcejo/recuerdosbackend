@@ -1,33 +1,28 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
 
-const MessageSchema = new Schema(
+const messageSchema = new mongoose.Schema(
   {
-    content: {
+    room: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'room'
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: 'user'
+    },
+    msg: {
       type: String,
       required: true,
       trim: true
     },
-    room: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'room'
-    },
-    writer: {
-      type: Schema.Types.ObjectId,
-      refPath: 'onModel'
-    },
-    onModel: {
-      type: String,
-      required: true,
-      enum: ['user', 'partner']
-    },
-    timestamps: {
-      createdAt: 'created_at'
+    createdAt: {
+      type: Number,
+      default: Date.now()
     }
   }
 )
 
-const Message = mongoose.model('Message', MessageSchema)
+const messageModel = mongoose.model('message', messageSchema)
 
-module.exports = { Message }
+module.exports = messageModel

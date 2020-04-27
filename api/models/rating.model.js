@@ -5,15 +5,24 @@ const RatingSchema = new Schema(
   {
     partner: {
       type: Schema.Types.ObjectId,
-      ref: 'partner',
-      default: null
+      ref: 'user'
     },
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
-      default: null
+      ref: 'user'
     },
-    rate: { type: Number }
+    rate: {
+      type: Number,
+      required: true
+    },
+    comment: {
+      type: String,
+      required: true
+    },
+    createdAt: {
+      type: Number,
+      default: Date.now()
+    }
   }
 )
 

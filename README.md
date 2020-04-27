@@ -82,60 +82,69 @@ Hit CTRL-C to stop the server
 
 ## MODELS
 
+### LOCATION MODEL
+
+| KEY         | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
+| --------    | -------- | --------- | -------- | ---------------
+| name        | String   |           | true     | -
+
 ### USER MODEL
 
-| KEY       | TYPE   | REQUIRED | VALIDATIONS  |
-| --------- | ------ | ---------|------------- |
+| KEY       | TYPE   | REQUIRED | VALIDATIONS  | DEFAULT
+| --------- | ------ | ---------|------------- | ---------------
 | email     | String | true     | regex(email  |
 | name      | String | true     |              |
-| role      | String | true     | default=user |
+| role      | String | true     | user/partner | user
 | password  | String | true     | min(6)       |
 | location  | String | true     | enum         |
 | img       | String | no       |              |
 
-### PARTNER MODEL
+### CATEGORY MODEL
 
-| KEY       | TYPE   | REQUIRED | VALIDATIONS     |
-| --------- | ------ | ---------|---------------- |
-| email     | String | true     | regex(email     |
-| name      | String | true     |                 |
-| partner   | String | true     |                 |
-| role      | String | true     | default=partner |
-| password  | String | true     | min(6)          |
-| location  | String | true     | enum            |
-| img       | String | no       |                 |
-
+| KEY         | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
+| --------    | -------- | --------- | -------- | ---------------
+| name        | String   |           | true     | -
 
 ### STYLE MODEL
 
 | KEY         | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
 | --------    | -------- | --------- | -------- | ---------------
-| partner     | ObjectId | Partner   | true     | -
-| style       | String   | -         | true     |
-| description | String  | -          | true     |
-| content     | String  | -          | true     |
-| price       | String  | -          | true     |
+| user        | ObjectId | user      | true     | -
+| category    | ObjectId | category  | true     |
+| description | String   | -         | true     |
+| content     | String   | -         | true     |
+| price_min   | Number   | -         | true     |
+| price_max   | Number   | -         |          |
+| img         | String   | -         |          |
 
 
 ### RATING MODEL
 | KEY      | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
 | -------- | -------- | --------- | -------- | ---------------
-| partner  | ObjectId | Partner   | true     | -
+| partner  | ObjectId | Users     | true     | -
 | user     | ObjectId | Users     | true     |
-| rate     | Number   |           | true     |
+| rate     | Number   |           | true     | min: 1, max: 5
+| comment  | String   | -         | true     |
+| create_on| Date     | -         |          | date.now
+
 
 ### ROOM MODEL
 | KEY      | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
 | -------- | -------- | --------- | -------- | ---------------
-| partner  | ObjectId | Partner   | true     | -
 | user     | ObjectId | Users     | true     |
+| partner  | ObjectId | users     | true     | -
+| subject  | String   | -         | true     |
+| create_on| Date     | -         |          | date.now
+
 
 ### MESSAGE MODEL
-| KEY      | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
-| -------- | -------- | --------- | -------- | ---------------
-| content  | String   | -         | true     |
-| writer   | ObjectId | onModel   | true     | -
-| onModel  | String   |           | true     | enum: ['user', 'partner']
+| KEY        | TYPE     | REFERENCE | REQUIRED | VALIDATIONS / DEFAULT
+| --------   | -------- | --------- | -------- | ---------------
+| room       | ObjectId | room      | true     |
+| user       | ObjectId | users     | true     | -
+| msg        | String   | -         | true     |
+| created_on | Date
+
 
 ## API ROUTES
 
@@ -148,47 +157,50 @@ POST http://DOMAIN/api/auth/signup
 ### AUTHENTICATION ENDPOINTS
 > TOKEN Required: NO
 
-| METHOD | URL                  | What does it do         |
-| ------ | ---------------------| ------------------------|
-| POST   | `auth/signup`        | Create a new user       |
+| METHOD | URL                  | What does it do         | PARAMS
+| ------ | ---------------------| ------------------------| -------
+| POST   | `auth/signup`        | Create a new user       | role = `user` (default), `partner`
 | POST   | `auth/login`         | Authenticates a user    |
-| POST   | `auth/signuppartner` | Create a new partner    |
-| POST   | `auth/loginpartner`  | Authenticates a partner |
+
+
+### PARTNERS ENDPOINTS
+> TOKEN Required: NO
+
+| METHOD | URL                       | What does it do          |
+| ------ | ------------------------- | ------------------------ |
+| GET    | `/partners`               | Get All Partner          | query = location
+| GET    | `/partners/:id`           | Get One Partner          |
 
 ### USER ENDPOINTS
 > TOKEN Required: YES
 
 | METHOD | URL                       | What does it do          |
 | ------ | ------------------------- | ------------------------ |
-| GET    | `users`                   | Get All Users            |
-| GET    | `users/:id`               | Get One User             |
-| PUT    | `users/:id`               | Update User              |
-| DELETE | `users/:id`               | Delete User              |
+| PUT    | `/me`                     | Update My Profile
+| GET    | `/me`                     | Get My Profile
+| DELETE | `/me`                     | Delete My Profile
 
-### ME ENDPOINTS
+### ME ROOMS ENDPOINTS
 > TOKEN Required: YES
+
+| METHOD | URL                       | What does it do
+| ------ | ------------------------- | ------------------------
+| GET    | `me/rooms`                | Get Rooms I have open
+| POST   | `me/rooms`                | Create Room
+| GET    | `me/rooms/:id`            | Get Room Message
+| DELETE | `me/rooms/:id`             | Delete Room
+| POST   | `me/rooms/:id`             | Create Message
+
+### ME STYLES ENDPOINTS
+> TOKEN Required: YES  ROLE: PARTNER
 
 | METHOD | URL                       | What does it do          |
 | ------ | ------------------------- | ------------------------ |
-| GET    | `me`                      | Get All Partner          |
-| PUT    | `me`                      | Update User              |
-| GET    | `me/:partnerid`           | Get One Partner          |
-| POST   | `me/:partnerid`           | Create Room              |
-| DELETE | `me/:roomid`              | Delete Room              |
-| POST   | `me/:roomid`              | Create Message           |
-
-### PARTNER ENDPOINTS
-> TOKEN Required: YES
-
-| METHOD | URL                       | What does it do          |
-| ------ | ------------------------- | ------------------------ |
-| GET    | `partner/others`          | Get All Partner          |
-| GET    | `partner`                 | Get All Partner          |
-| PUT    | `partner`                 | Update Partner           |
-| POST   | `partner`                 | Create Style             |
-| DELETE | `partner/`                | Delete Style             |
-| DELETE | `partner/:roomid`         | Delete Room              |
-| POST   | `partner/:roomid`         | Create Message           |
+| GET    | `me/styles`               | Get All Partner Styles   |
+| POST   | `me/styles`               | Create Style             |
+| DELETE | `me/styles/:id`           | Delete Style             |
+| GET    | `me/styles/:id`           | Get One Style            |
+| PUT    | `me/styles/:id`           | Update Style             |
 
 
 Happy coding!

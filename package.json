@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "seed": "node seed.js",
+    "users": "node users.js",
     "start": "nodemon index.js"
   },
   "author": "",

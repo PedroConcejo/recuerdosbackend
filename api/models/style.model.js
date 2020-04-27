@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const StyleSchema = new Schema(
   {
-    room: {
+    partner: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: 'partner'

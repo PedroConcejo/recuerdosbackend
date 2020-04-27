@@ -13,7 +13,7 @@ const MessageSchema = new Schema(
       required: true,
       ref: 'room'
     },
-    user: {
+    writer: {
       type: Schema.Types.ObjectId,
       refPath: 'onModel'
     },

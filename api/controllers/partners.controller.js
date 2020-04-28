@@ -3,7 +3,7 @@ const { handleError } = require('../utils')
 
 module.exports = {
   getAllPartners,
-  getPartnersById
+  getPartnerById
 }
 
 function getAllPartners (req, res) {
@@ -27,7 +27,7 @@ function getAllPartners (req, res) {
     .catch((err) => handleError(err, res))
 }
 
-function getPartnersById (req, res) {
+function getPartnerById (req, res) {
   UserModel
     .findById(req.params.id)
     .then(response => res.json(response))

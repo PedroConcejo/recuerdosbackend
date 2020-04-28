@@ -2,11 +2,11 @@ const router = require('express').Router()
 
 const {
   getAllPartners,
-  getPartnersById
+  getPartnerById
 
 } = require('../controllers/partners.controller')
 
 router.get('/', getAllPartners)
-router.get('/:id', getPartnersById)
+router.get('/:id', getPartnerById)
 
 module.exports = router

@@ -15,14 +15,16 @@ function signup (req, res) {
     email: req.body.email,
     password: hashedPwd,
     img: req.body.img,
-    location: req.body.location
+    location: req.body.location,
+    role: req.body.role
   }
 
   UserModel.create(userBody)
     .then(() => {
       const userData = {
         username: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        role: req.body.role
       }
 
       const token = jwt.sign(
@@ -53,7 +55,7 @@ function login (req, res) {
           })
         }
 
-        const userData = { username: user.name, email: user.email }
+        const userData = { username: user.name, email: user.email, role: user.role }
 
         const token = jwt.sign(
           userData,

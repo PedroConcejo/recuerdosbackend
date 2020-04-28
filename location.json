@@ -47,7 +47,9 @@
       {
         "name": "Córdoba"
       },
-      { "name": "La Coruña" },
+      {
+        "name": "La Coruña"
+      },
       {
         "name": "Cuenca"
       },

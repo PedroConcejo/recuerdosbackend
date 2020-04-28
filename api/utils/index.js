@@ -24,7 +24,15 @@ function handleError (err, res) {
   return res.status(400).json(err)
 }
 
+function partnerControl (req, res, next) {
+  if (res.locals.user.role === 'partner') {
+    next()
+  } else {
+    res.status(403).json({ error: 'No Role found' })
+  }
+}
 module.exports = {
   authUser,
-  handleError
+  handleError,
+  partnerControl
 }

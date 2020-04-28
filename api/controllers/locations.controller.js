@@ -6,6 +6,7 @@ module.exports = {
 }
 
 function getAllLocations (req, res) {
+  console.log('HOLA')
   LocationModel
     .find()
     .then(response => res.json(response))

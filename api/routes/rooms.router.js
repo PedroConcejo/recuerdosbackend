@@ -5,7 +5,8 @@ const {
   getMyRooms,
   getRoom,
   deleteRoom,
-  newMsn
+  newMsn,
+  getMessageByRoom
 } = require('../controllers/rooms.controller')
 
 router.post('/', startRoom)
@@ -13,5 +14,6 @@ router.get('/', getMyRooms)
 router.get('/:roomid', getRoom)
 router.delete('/:roomid', deleteRoom)
 router.post('/:roomid', newMsn)
+router.get('/:roomid/msg', getMessageByRoom)
 
 module.exports = router

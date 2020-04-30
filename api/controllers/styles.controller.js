@@ -24,6 +24,7 @@ function createStyle (req, res) {
 function getMystyles (req, res) {
   StyleModel
     .find()
+    .populate('category')
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

@@ -8,7 +8,8 @@ module.exports = {
   getMyRooms,
   getRoom,
   deleteRoom,
-  newMsn
+  newMsn,
+  getMessageByRoom
 }
 
 function startRoom (req, res) {
@@ -26,6 +27,7 @@ function startRoom (req, res) {
 function getMyRooms (req, res) {
   RoomModel
     .find({ user: res.locals.user._id })
+    .populate('partner')
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }
@@ -46,12 +48,19 @@ function deleteRoom (req, res) {
 
 function newMsn (req, res) {
   const roomBody = {
-    writer: res.locals.user._id,
+    user: res.locals.user._id,
     msg: req.body.msg,
     room: req.params.roomid
   }
   MessageModel
     .create(roomBody)
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getMessageByRoom (req, res) {
+  MessageModel
+    .find({ room: req.params.roomid })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

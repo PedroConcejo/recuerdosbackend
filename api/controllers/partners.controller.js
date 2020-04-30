@@ -1,9 +1,12 @@
 const UserModel = require('../models/users.model')
+const StyleModel = require('../models/style.model')
 const { handleError } = require('../utils')
 
 module.exports = {
   getAllPartners,
-  getPartnerById
+  getAllByStyles,
+  getPartnerById,
+  getPartnerStyles
 }
 
 function getAllPartners (req, res) {
@@ -23,13 +26,40 @@ function getAllPartners (req, res) {
   }
   UserModel
     .find(filters)
+    .populate('location')
     .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getAllByStyles (req, res) {
+  StyleModel
+    .find()
+    .populate('category')
+    .populate({ path: 'user', populate: { path: 'location' } })
+    .then(response => {
+      if (req.query.name) { response = response.filter(e => e.user.name.toLowerCase().includes(req.query.name.toLowerCase())) }
+
+      if (req.query.location) { response = response.filter(e => e.user.location.name === req.query.location) }
+
+      if (req.query.style) { response = response.filter(e => e.category.name === req.query.style) }
+      res.json(response)
+    })
+
     .catch((err) => handleError(err, res))
 }
 
 function getPartnerById (req, res) {
   UserModel
     .findById(req.params.id)
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getPartnerStyles (req, res) {
+  StyleModel
+    .find({ user: req.params.id })
+    .populate('user')
+    .populate('category')
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

@@ -2,14 +2,14 @@ const router = require('express').Router()
 
 const {
   createRating,
-  getPartnerRatings,
+  getMyRating,
   deleteRating,
   getRating,
   updateRating
 } = require('../controllers/rating.controller')
 
 router.post('/', createRating)
-router.get('/', getPartnerRatings)
+router.get('/', getMyRating)
 router.delete('/:ratingid', deleteRating)
 router.get('/:ratingid', getRating)
 router.put('/:ratingid', updateRating)

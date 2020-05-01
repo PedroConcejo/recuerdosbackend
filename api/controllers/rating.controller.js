@@ -4,10 +4,10 @@ const { handleError } = require('../utils')
 
 module.exports = {
   createRating,
-  getPartnerRatings,
   deleteRating,
   getRating,
-  updateRating
+  updateRating,
+  getMyRating
 }
 
 function createRating (req, res) {
@@ -21,9 +21,9 @@ function createRating (req, res) {
     .catch((err) => handleError(err, res))
 }
 
-function getPartnerRatings (req, res) {
+function getMyRating (req, res) {
   RatingModel
-    .find({ partner: req.body.partner })
+    .find({ user: res.locals.user._id })
     .populate('user')
     .populate('partner')
     .then(response => res.json(response))

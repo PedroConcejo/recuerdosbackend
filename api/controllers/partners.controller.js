@@ -1,12 +1,15 @@
 const UserModel = require('../models/users.model')
 const StyleModel = require('../models/style.model')
+const RatingModel = require('../models/rating.model')
+
 const { handleError } = require('../utils')
 
 module.exports = {
   getAllPartners,
   getAllByStyles,
   getPartnerById,
-  getPartnerStyles
+  getPartnerStyles,
+  getPartnerRatings
 }
 
 function getAllPartners (req, res) {
@@ -60,6 +63,15 @@ function getPartnerStyles (req, res) {
     .find({ user: req.params.id })
     .populate('user')
     .populate('category')
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getPartnerRatings (req, res) {
+  RatingModel
+    .find({ partner: req.params.id })
+    .populate('user')
+    .populate('partner')
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

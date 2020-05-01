@@ -24,6 +24,8 @@ function createRating (req, res) {
 function getPartnerRatings (req, res) {
   RatingModel
     .find({ partner: req.body.partner })
+    .populate('user')
+    .populate('partner')
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

@@ -7,7 +7,7 @@ const partnersRouter = require('./partners.router')
 const locationsRouter = require('./locations.router')
 const categoriesRouter = require('./categories.router')
 
-const { authUser } = require('../utils')
+const { authUser, partnerControl } = require('../utils')
 
 router.use('/auth', authRouter)
 router.use('/users', usersRouter)
@@ -18,6 +18,10 @@ router.use('/categories', categoriesRouter)
 
 router.get('/whoami', authUser, (req, res) => {
   res.send(res.locals.user._id)
+})
+
+router.get('/rolecontrol', partnerControl, (req, res) => {
+  res.send('Welcome Business Man')
 })
 
 module.exports = router

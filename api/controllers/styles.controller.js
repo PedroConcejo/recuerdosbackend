@@ -23,8 +23,9 @@ function createStyle (req, res) {
 
 function getMystyles (req, res) {
   StyleModel
-    .find()
+    .find({ user: res.locals.user._id })
     .populate('category')
+    .populate({ path: 'user', populate: { path: 'location' } })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }
@@ -32,6 +33,8 @@ function getMystyles (req, res) {
 function getStyle (req, res) {
   StyleModel
     .findById(req.params.styleid)
+    .populate('category')
+    .populate({ path: 'user', populate: { path: 'location' } })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

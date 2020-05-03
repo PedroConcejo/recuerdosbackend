@@ -25,12 +25,20 @@ function handleError (err, res) {
 }
 
 function partnerControl (req, res, next) {
-  if (res.locals.user.role === 'partner') {
-    next()
+  if (!req.headers.token) {
+    res.status(403).json({ error: 'No Token found' })
   } else {
-    res.status(403).json({ error: 'No Role found' })
+    jwt.verify(req.headers.token, process.env.SECRET, (err, token) => {
+      if (err) { res.status(403).json({ error: 'Token not valid' }) }
+      if (token.role === 'partner') {
+        next()
+      } else {
+        res.status(403).json({ error: 'No Role found' })
+      }
+    })
   }
 }
+
 module.exports = {
   authUser,
   handleError,

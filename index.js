@@ -26,6 +26,7 @@ const app = express()
   .use(express.json())
   .use(express.static(path.join(__dirname, 'public')))
   .use('/api', require('./api/routes'))
+  .disable('etag')
 // Init server
 const PORT = process.env.PORT || 2222
 app.listen(PORT, (err) => {

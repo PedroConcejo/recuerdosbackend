@@ -7,7 +7,6 @@ const stylesRouter = require('./styles.router')
 const ratingsRouter = require('./ratings.router')
 const favoritesRouter = require('./favorites.router')
 
-
 router.use('/profile', profileRouter)
 router.use('/rooms', roomsRouter)
 router.use('/styles', stylesRouter)

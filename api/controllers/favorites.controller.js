@@ -5,7 +5,8 @@ const { handleError } = require('../utils')
 module.exports = {
   addFav,
   getMyFav,
-  removeFav
+  removeFav,
+  getMyFavDisplay
 }
 
 function addFav (req, res) {
@@ -33,4 +34,14 @@ function removeFav (req, res) {
     })
     .then(response => res.json(response))
     .catch(err => handleError(err, res))
+}
+
+function getMyFavDisplay (req, res) {
+  UserModel
+    .find({ _id: res.locals.user._id })
+    .populate({ path: 'favorites', model: 'style' })
+    .populate({ path: 'favorites', populate: { path: 'user', populate: { path: 'location' } } })
+    .populate({ path: 'favorites', populate: { path: 'category' } })
+    .then(response => res.json(response[0].favorites))
+    .catch((err) => handleError(err, res))
 }

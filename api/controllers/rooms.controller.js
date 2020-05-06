@@ -6,6 +6,8 @@ const { handleError } = require('../utils')
 module.exports = {
   startRoom,
   getMyRooms,
+  getPartnerRooms,
+  getPartnerRoom,
   getRoom,
   deleteRoom,
   newMsn,
@@ -28,6 +30,20 @@ function getMyRooms (req, res) {
   RoomModel
     .find({ user: res.locals.user._id })
     .populate('partner')
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+function getPartnerRooms (req, res) {
+  RoomModel
+    .find({ partner: res.locals.user._id })
+    .populate('user')
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function getPartnerRoom (req, res) {
+  RoomModel
+    .findById(req.params.roomid)
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

@@ -60,14 +60,20 @@ function changePassword (req, res) {
 
 function newmsg (req, res) {
   UserModel
-    .findByIdAndUpdate(req.params.id, { $inc: { msg: 1 } })
+    .findByIdAndUpdate(req.params.id, { $inc: { msg: 1 } }, {
+      new: true,
+      runValidators: true
+    })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }
 
 function clearmsg (req, res) {
   UserModel
-    .findByIdAndUpdate(res.locals.user._id, { $set: { msg: 0 } })
+    .findByIdAndUpdate(res.locals.user._id, { $set: { msg: 0 } }, {
+      new: true,
+      runValidators: true
+    })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

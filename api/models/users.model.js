@@ -32,6 +32,9 @@ const userSchema = new mongoose.Schema({
   img: {
     type: String
   },
+  msg: {
+    type: Number
+  },
   location: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

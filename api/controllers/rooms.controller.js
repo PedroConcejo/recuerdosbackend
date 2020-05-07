@@ -78,6 +78,7 @@ function getMessageByRoom (req, res) {
   MessageModel
     .find({ room: req.params.roomid })
     .populate({ path: 'user', model: 'user' })
+    .populate({ path: 'room', model: 'room' })
     .then(response => res.json(response))
     .catch((err) => handleError(err, res))
 }

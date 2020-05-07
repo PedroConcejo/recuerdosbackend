@@ -7,7 +7,9 @@ module.exports = {
   getMe,
   updateUser,
   deleteMe,
-  changePassword
+  changePassword,
+  newmsg,
+  clearmsg
 }
 
 function getMe (req, res) {
@@ -54,4 +56,18 @@ function changePassword (req, res) {
           .catch((err) => handleError(err, res))
       })
     })
+}
+
+function newmsg (req, res) {
+  UserModel
+    .findByIdAndUpdate(req.params.id, { $inc: { msg: 1 } })
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
+}
+
+function clearmsg (req, res) {
+  UserModel
+    .findByIdAndUpdate(res.locals.user._id, { $set: { msg: 0 } })
+    .then(response => res.json(response))
+    .catch((err) => handleError(err, res))
 }
